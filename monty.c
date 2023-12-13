@@ -1,15 +1,23 @@
 #include "monty.h"
 #include <stdio.h>
+#include <unistd.h>
 
 int main(int argc, char *argv[])
 {
+	FILE *file = fopen(argv[1], "r");
+	char *line = NULL;
+	size_t len = 0;
+	unsigned int line_number = 0;
+
+	stack_t *stack = NULL;
+
 	if (argc != 2)
 	{
 		fprintf(stderr, "USAGE: monty file\n");
 		return (EXIT_FAILURE);
 	}
 
-	FILE *file = fopen(argv[1], "r");
+
 
 	if (file == NULL)
 	{
@@ -18,14 +26,11 @@ int main(int argc, char *argv[])
 	}
 
 	/* Initialize stack */
-	stack_t *stack = NULL;
+
 
 	/* Read and process the file line by line */
-	char *line = NULL;
-	size_t len = 0;
-	ssize_t read;
-
-	while ((read = getline(&line, &len, file)) != -1)
+	
+	while (fgets(line, len, file) != NULL)
 	{
 		/* Process the line here */
 		parse_opcode_and_execute(&stack, line, line_number);
